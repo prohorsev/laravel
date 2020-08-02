@@ -13,9 +13,32 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-Route::get('/info', function () {
-    return view('welcome');
+Route::get('/', 'NewsController@index');
+Route::get('/news/{id}.html', 'NewsController@show')
+	->where('id', '\d+')
+	->name('news.show');
+
+Route::get('/hello', 'HelloController@index');
+
+Route::get('/newscategories', 'NewsCategoriesController@index');
+Route::get('/newscategories/{id}.html', 'NewsCategoriesController@showNews')
+	->where('id', '\d+')
+    ->name('newscategories.shownews');
+Route::get('/newscategories/item{id}.html', 'NewsCategoriesController@showItem')
+	->where('id', '\d+')
+	->name('newscategories.showitem');
+	
+Route::get('/addnews', 'AddNewsController@index');
+
+//for admin
+Route::group(['prefix' => 'admin'], function() {
+  Route::get('/', 'Admin\IndexController@index')
+	   ->name('admin');
+  Route::get('/news', 'Admin\NewsController@index')
+	  ->name('admin.news');
+  Route::get('/news/create', 'Admin\NewsController@create')
+	  ->name('admin.news.create');
+  Route::get('/news/{id}/edit', 'Admin\NewsController@edit')
+	 ->where('id', '\d+')
+	 ->name('admin.news.edit');
 });
