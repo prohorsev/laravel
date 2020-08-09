@@ -50,3 +50,13 @@ Route::group(['prefix' => 'admin'], function () {
 		->where('id', '\d+')
 		->name('admin.news.edit');
 });
+
+
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/feedback', 'FeedbackController@index')->name('feedback');
+Route::post('/feedback/store', 'FeedbackController@store')
+	  ->name('feedback.store');
