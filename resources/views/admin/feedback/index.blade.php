@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
 <div>
-    <a href="{{ route('news.create') }}">Добавить новость</a>
+    <a href="{{ route('feedback.create') }}">Добавить категорию</a>
     <br>
     <a href="{{ route('admin') }}">В админку</a>
 </div>
@@ -10,9 +10,9 @@
      <strong>{{ session()->get('success') }}</strong>
 @endif
 <div class="col-md-4 offset-2">
-    @forelse($newsList as $news)
+    @forelse($feedbackList as $feedback)
         <div>
-             <p><a href=" {{ route('news.edit', ['news' => $news]) }}">{{ $news->title }}</a><a href="destroy/{{ $news->id }}}}">Удалить</a></p>
+             <p><a href=" {{ route('feedback.edit', ['feedback' => $feedback]) }}">{{ $feedback->name }}</a><a href="feedback/destroy/{{ $feedback->id }}}}">Удалить</a></p>
               <br>
         </div>
      @empty

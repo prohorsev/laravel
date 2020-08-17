@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSourceTable extends Migration
+class CreateFeedback extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,11 @@ class CreateSourceTable extends Migration
      */
     public function up()
     {
-        Schema::create('source', function (Blueprint $table) {
+        Schema::create('feedback', function (Blueprint $table) {
             $table->id();
-            $table->string('source');
+            $table->string('name', 191);
+            $table->text('text')->nullable();
+            $table->timestamps();
         });
     }
 
@@ -26,6 +28,6 @@ class CreateSourceTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('source');
+        Schema::dropIfExists('feedback');
     }
 }

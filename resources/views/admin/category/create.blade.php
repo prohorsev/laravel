@@ -1,10 +1,9 @@
 @extends('layouts.app')
 @section('content')
     <div class="col-md-4  offset-2">
-        <h1>Добавить новость</h1><br>
-        <form method="post" action="{{ route('news.store') }}">
+        <h1>Добавить категорию</h1><br>
+        <form method="post" action="{{ route('category.store') }}">
             @csrf
-            <p><input type="text" class="form-control" name="img" placeholder="Изображение" value="{{ old('img') }}"></p>
             <p><input type="text" class="form-control" name="title" placeholder="Заголовок" value="{{ old('title') }}">
                 @error('title') Заполните это поле @enderror</p>
             <p><input type="text" class="form-control" name="slug" placeholder="Слаг" value="{{ old('slug')  }}">

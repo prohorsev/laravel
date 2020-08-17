@@ -20,9 +20,11 @@ class CategoriesSeeder extends Seeder
 		 $faker = \Faker\Factory::create('ru_RU');
          $data = [];
 
-         for($i=0; $i < 5; $i++) {
+         for($i=0; $i < 10; $i++) {
             $data[] = [
-            	 'category' => $faker->sentence(mt_rand(3, 10))
+            	 'title' => $faker->sentence(mt_rand(3, 10)),
+				 'slug'  => $faker->slug(mt_rand(3, 10)),
+				 'description' => $faker->realText(mt_rand(100, 200))
 			];
 		 }
 

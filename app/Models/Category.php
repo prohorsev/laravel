@@ -3,21 +3,17 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 
 class Category extends Model
 {
     protected $table = "categories";
+    protected $primaryKey = "id";
 
+    protected $fillable = ['title', 'slug', 'description'];
 
-    public function getAll(): array
+    public function news()
 	{
-      return DB::select("select id, category from categories");
-	}
-
-	public function getById(int $id)
-	{
-       return DB::selectOne("select id, category from categories where id = :id",
-		['id' => $id]);
+		 return $this->belongsToMany(News::class, 'categories_has_news',
+			 'category_id', 'news_id');
 	}
 }
