@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CategoryCreateRequest;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -33,12 +34,12 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param CategoryCreateRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CategoryCreateRequest $request)
     {
-        $data = $request->only(['title', 'slug', 'description']);
+        $data = $request->validated();
 
     	if(!$data['slug']) {
     		 $data['slug'] = Str::slug($data['title'], "-");
@@ -46,10 +47,10 @@ class CategoryController extends Controller
 
         $category = Category::create($data);
         if($category) {
-			return redirect()->route('category.index')->with('success', 'Категория успешно добавлена');
+			return redirect()->route('category.index')->with('success', trans('messages.admin.category.store.success'));
 		}
 
-        return back();
+        return back()->with('error', trans('messages.admin.category.store.fail'));
     }
 
     /**
@@ -77,7 +78,7 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param CategoryCreateRequest $request
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
@@ -87,10 +88,10 @@ class CategoryController extends Controller
         $category->description = $request->input('text');
 
         if($category->save()) {
-        	return redirect()->route('category.index')->with('success', 'Категория успешно обновлена');
+        	return redirect()->route('category.index')->with('success', trans('messages.admin.category.update.success'));
 		}
 
-        return back();
+        return back()->with('error', trans('messages.admin.category.update.fail'));
     }
 
     /**
@@ -103,6 +104,6 @@ class CategoryController extends Controller
     {
         Category::destroy($id);
 
-        return redirect()->route('admin.categories')->with('success', 'Категория успешно удалена');
+        return redirect()->route('admin.categories')->with('success', trans('messages.admin.category.delete.success'));
     }
 }

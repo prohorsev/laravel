@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\NewsCreateRequest;
 use App\Models\News;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -29,32 +30,33 @@ class NewsController extends Controller
 		return view('admin.news.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+	/**
+	 * Store a newly created resource in storage.
+	 *
+	 * @param NewsCreateRequest $request
+	 * @return \Illuminate\Http\RedirectResponse
+	 */
+    public function store(NewsCreateRequest $request)
     {
-		$data = $request->only(['img', 'title', 'slug', 'description']);
+    	$data = $request->validated();
+    	if (!$data['slug']) {
+				$data['slug'] = Str::slug($data['title'], "-");
+    	}
 
-    	if(!$data['slug']) {
-    		 $data['slug'] = Str::slug($data['title'], "-");
-		}
+    	$news = News::create($data);
+    	if ($news) {
+    		return redirect()->route('admin.news')->with('success',
+				 trans('messages.admin.news.store.success'));
+    	}
 
-        $news = News::create($data);
-        if($news) {
-			return redirect()->route('news.index')->with('success', 'Новость успешно добавлена');
-		}
+    	return back()->with('error', trans('messages.admin.news.store.fail'));
 
-        return back();
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\News  $news
+     * @param NewsCreateRequest $request
      * @return \Illuminate\Http\Response
      */
     public function show(News $news)
@@ -77,8 +79,8 @@ class NewsController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\News  $news
-     * @return \Illuminate\Http\Response
-     */
+     * @return \Illuminate\Http\RedirectResponse
+	 */
     public function update(Request $request, News $news)
     {
     	$news->img   = $request->input('img');
@@ -86,10 +88,11 @@ class NewsController extends Controller
         $news->description = $request->input('text');
 
         if($news->save()) {
-        	return redirect()->route('news.index')->with('success', 'Новость успешно обновлена');
+        	return redirect()->route('admin.news')->with('success',
+				trans('messages.admin.news.update.success'));
 		}
 
-        return back();
+        return back()->with('error', trans('messages.admin.news.update.fail'));
     }
 
     /**
@@ -102,6 +105,6 @@ class NewsController extends Controller
     {
         News::destroy($id);
 
-        return redirect()->route('admin.news')->with('success', 'Новость успешно удалена');
+        return redirect()->route('admin.news')->with('success', trans('messages.admin.news.delete.success'));
     }
 }

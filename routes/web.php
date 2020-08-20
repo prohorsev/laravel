@@ -42,7 +42,7 @@ Route::group(['prefix' => 'admin'], function() {
 
 });
 Route::get('/admin/feedback', 'Admin\FeedbackController@index')->name('admin.feedback');
-Route::get('/admin/feedback', 'Admin\FeedbackController@index')->name('feedback.index');
+//Route::get('/admin/feedback', 'Admin\FeedbackController@index')->name('feedback.index');
 
 Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
