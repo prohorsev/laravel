@@ -1,5 +1,6 @@
 <?php
 
+use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -24,23 +25,28 @@ Route::get('/news/{id}.html', 'NewsController@show')
 
 
 //for admin
-Route::group(['prefix' => 'admin'], function() {
-  Route::get('/', 'Admin\IndexController@index')
-	   ->name('admin');
-  //news
-  Route::resource('/news', 'Admin\NewsController');
-  Route::get('/news', 'Admin\NewsController@index')->name('admin.news');
-  Route::get('/destroy/{id}','Admin\NewsController@destroy');
-  //Category
-  Route::get('/categories', 'Admin\CategoryController@index')->name('admin.categories');
-  Route::resource('/category', 'Admin\CategoryController');
-  Route::get('/category/destroy/{id}','Admin\CategoryController@destroy');
-  //Feedback
-  Route::get('/feedback', 'Admin\FeedbackController@index')->name('admin.feedback');
-  Route::resource('/feedback', 'Admin\FeedbackController');
-  Route::get('/feedback/destroy/{id}','Admin\FeedbackController@destroy');
+Route::group(['middleware' => 'auth'], function() {
+  Route::get('/account', 'Account\IndexController@index')->name('account');
 
+  Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function() {
+    Route::get('/', 'Admin\IndexController@index')
+       ->name('admin');
+    //news
+    Route::resource('/news', 'Admin\NewsController');
+    Route::get('/news', 'Admin\NewsController@index')->name('admin.news');
+    Route::get('/destroy/{id}','Admin\NewsController@destroy');
+    //Category
+    Route::get('/categories', 'Admin\CategoryController@index')->name('admin.categories');
+    Route::resource('/category', 'Admin\CategoryController');
+    Route::get('/category/destroy/{id}','Admin\CategoryController@destroy');
+    //Feedback
+    Route::get('/feedback', 'Admin\FeedbackController@index')->name('admin.feedback');
+    Route::resource('/feedback', 'Admin\FeedbackController');
+    Route::get('/feedback/destroy/{id}','Admin\FeedbackController@destroy');
+  
+  });
 });
+
 Route::get('/admin/feedback', 'Admin\FeedbackController@index')->name('admin.feedback');
 //Route::get('/admin/feedback', 'Admin\FeedbackController@index')->name('feedback.index');
 
