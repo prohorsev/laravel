@@ -7,4 +7,6 @@
 <a href="{{ route('admin.feedback') }}">Список отзывов</a>
 @if(session()->has('error'))
 <h1 style="color: red;">{{ session()->get('error') }}</h1>
+@endif
+<img src="{{ $user->avatar }}">
 @stop

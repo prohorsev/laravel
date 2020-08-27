@@ -63,3 +63,12 @@ Route::get('/collections', function() {
 
 	$collection->dd(1);
 });
+
+Route::get('/parsing/news', 'ParserController@index')->name('news.parser');
+
+//auth socialite
+Route::get('/auth/vk', 'Auth\SocialController@loginVK')->name('vk.login');
+Route::get('/auth/vk/callback', 'Auth\SocialController@callbackVK')->name('vk.callback');
+Route::get('/auth/fb', 'Auth\SocialController@loginFB')->name('fb.login');
+Route::get('/auth/fb/callback', 'Auth\SocialController@callbackFB')->name('fb.callback');
+
