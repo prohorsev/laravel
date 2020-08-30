@@ -3,6 +3,7 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\Storage;
 use Orchestra\Parser\Xml\Facade as XmlParser;
 
 class ParserService
@@ -28,5 +29,14 @@ class ParserService
 		  'image' => ['uses' => 'channel.image.url'],
 		  'news' => ['uses' => 'channel.item[title,link,description]']
 	  ]);
+   }
+
+	/**
+	 *
+	 */
+   public function saveData(): void
+   {
+   	   $json = json_encode($this->getData());
+   	   Storage::disk('local')->put($this->url . ".txt", $json);
    }
 }
